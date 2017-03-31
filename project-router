@@ -1,0 +1,18 @@
+#
+# P-Router
+# @Author Joaquin Armengol <dwuomo>
+# # version 1.1
+# Agility form to navigate between work project directories 
+# [Mod] -- for confortable self action i defined in p command 
+# [Next] -- Defined autocomplete options
+#
+
+
+p() {
+    if [ -z "$1" ]; 
+    then cd ~/work; ls -la
+    else
+        dir=$(find /home/dwuomo/work -maxdepth 1 -name \*$1\* -type d  -print | head -n1)
+        if [ -z $dir ]; then echo ${fg[red]} "Not coincidence found"; return; else cd $dir; ls -la; fi
+    fi
+}

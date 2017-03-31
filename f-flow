@@ -1,0 +1,89 @@
+#
+# F-Flow
+# @Author Joaquin Armengol <dwuomo>
+# # version 1.1
+# Try to gathering Git flow boiler plate actions under f command
+# [Mod] -- for confortable self action i defined in f command 
+# [Next] -- Defined autocomplete options
+#
+
+
+function flow() {
+    ACTION=$1;
+    OPTION=$2;
+    NAME=$3;
+    optionList=( "feature" "hotfix" "release" );
+
+    if [[ "${optionList[@]}" =~ $ACTION ]]; 
+    then; 
+        if [ -z "$2" ]; then echo "Option is required please fill"; return; fi
+        if [ -z "$3" ]; then echo "Branch name is required please fill"; return; fi
+        git flow $ACTION $OPTION $NAME;
+    else; echo "Please provide one of the valid actions feature|hotfix|release";
+    fi
+
+    return;
+}
+
+function update() {
+    BRANCH=$1
+    branchList=( "develop" "master" );
+
+    if [ -z "$1" ]; then echo ${fg[red]} "please provice some of this branches to update develop | master"; return; fi
+
+    if [[ "${branchList[@]}" =~ $BRANCH ]]; then
+        git checkout $BRANCH;
+        git pull origin $BRANCH;
+    else; echo ${fg[red]} "Incorrect branch name: Please provide develop | master"
+    fi
+}
+
+function fgo() {
+    CHECKOUT=$1
+
+    for BRANCH in `git branch --list|sed 's/\*//g'`;
+    do 
+        if [[ $BRANCH == *"$CHECKOUT"* ]]; then
+            git checkout $BRANCH;
+            return;
+        fi
+    done
+
+    echo ${fg[red]} "Does not exist some branch with this reg-exp";
+}
+
+function f() {
+    optionList=( "feature" "hotfix" "release" );
+
+    if [ -z "$1" ]; then
+        git branch;
+        git status;
+        return;
+    fi
+
+    if [[ "$1" = "update" ]]; then
+        if [[ -n $(git status --porcelain) ]]; 
+        then 
+            echo ${fg[yellow]}"REPO IS DIRTY!!!!";
+            git status; 
+        else update $2; return;
+        fi
+    elif [[ "$1" = "co" ]]; then 
+        if [[ -n $(git status --porcelain) ]]; 
+        then 
+            echo ${fg[yellow]}"REPO IS DIRTY!!!!";
+            git status; 
+        else fgo $2; return;
+        fi
+    elif [[ "${optionList[@]}" =~ $1 ]]; then
+        if [[ -n $(git status --porcelain) ]]; 
+        then 
+            echo ${fg[yellow]}"REPO IS DIRTY!!!!";
+            git status; 
+        elif [ -n "$1" ];
+        then flow $1 $2 $3; return;
+        fi 
+    else
+        git $1 $2 $3 $4; return;
+    fi
+}
