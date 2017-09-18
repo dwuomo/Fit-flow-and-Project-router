@@ -57,6 +57,7 @@ function f() {
 
     if [ -z "$1" ]; then
         git branch;
+        ag "TODO\(dwuomo\)"
         git status;
         return;
     fi
