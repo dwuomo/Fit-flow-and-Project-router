@@ -1,0 +1,17 @@
+#/usr/bin/env bash
+
+function cosicas() {
+    if [ -z "$1" ]; then
+        echo ${fg[yellow]}"forget origin branch";
+        return;
+    fi
+
+    if [ -z "$2" ]; then
+        echo ${fg[yellow]}"forget destination branch";
+        return;
+    fi
+
+    google-chrome-stable http://bitbucket.org/cochescom/mizona.coches.com/compare/$1%0D$2?_pjax=%23compare-content
+
+
+}

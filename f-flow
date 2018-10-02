@@ -65,21 +65,57 @@ function f() {
     if [[ "$1" = "update" ]]; then
         if [[ -n $(git status --porcelain) ]]; 
         then 
-            echo ${fg[yellow]}"REPO IS DIRTY!!!!";
+            echo ${fg[yellow]}"TXATXO COMMITEA LAS MIERDAS!!!";
             git status; 
         else update $2; return;
         fi
     elif [[ "$1" = "co" ]]; then 
         if [[ -n $(git status --porcelain) ]]; 
         then 
-            echo ${fg[yellow]}"REPO IS DIRTY!!!!";
+            echo ${fg[yellow]}"TXATXO COMMITEA LAS MIERDAS!!!!";
             git status; 
         else fgo $2; return;
+        fi
+    elif [[ "$1" = "branch:merged" ]]; then 
+        if [[ -n $(git status --porcelain) ]]; 
+        then 
+            echo ${fg[yellow]}"TXATXO COMMITEA LAS MIERDAS!!!!";
+            git status; 
+        else 
+            git checkout master;
+            git branch --merged | egrep -v "(^\*|master|dev)"; return;
+        fi
+    elif [[ "$1" = "branch:no-merged" ]]; then 
+        if [[ -n $(git status --porcelain) ]]; 
+        then 
+            echo ${fg[yellow]}"TXATXO COMMITEA LAS MIERDAS!!!!";
+            git status; 
+        else 
+            git checkout master;
+            git branch --no-merged | egrep -v "(^\*|master|dev)"; return;
+        fi
+    elif [[ "$1" = "branch:merged:delete" ]]; then 
+        if [[ -n $(git status --porcelain) ]]; 
+        then 
+            echo ${fg[yellow]}"TXATXO COMMITEA LAS MIERDAS!!!!";
+            git status; 
+        else 
+            git checkout master;
+            git branch --merged | egrep -v "(^\*|master|dev)" | xargs git branch -d; return;
+        fi
+    elif [[ "$1" = "branch:no-merged:delete" ]]; then 
+        if [[ -n $(git status --porcelain) ]]; 
+        then 
+            echo ${fg[yellow]}"TXATXO COMMITEA LAS MIERDAS!!!!";
+            git status; 
+        else 
+            git checkout master;
+            git branch --no-merged | egrep -v "(^\*|master|dev)" | xargs git branch -D; return;
         fi
     elif [[ "${optionList[@]}" =~ $1 ]]; then
         if [[ -n $(git status --porcelain) ]]; 
         then 
-            echo ${fg[yellow]}"REPO IS DIRTY!!!!";
+            echo ${fg[yellow]}"TXATXO COMMITEA LAS MIERDAS!!!!";
             git status; 
         elif [ -n "$1" ];
         then flow $1 $2 $3; return;
