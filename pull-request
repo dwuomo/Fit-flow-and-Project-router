@@ -20,3 +20,31 @@ pr() {
   google-chrome-stable "https://bitbucket.org/$to_user/$repo/compare/$from_branch%0D$to_branch"
 }
 
+prs () {
+  upstream=$(git config --get remote.upstream.url)
+  origin=$(git config --get remote.origin.url)
+
+  if [ -z $upstream ]; then
+    upstream=$origin
+  fi
+
+  to_user=$(echo $upstream | sed -e 's/.*[\/:]\([^/]*\)\/[^/]*$/\1/')
+  repo=$(basename `git rev-parse --show-toplevel`)
+
+  google-chrome-stable "https://bitbucket.org/$to_user/$repo/pull-requests"
+}
+
+push() {
+    from_branch=$(git rev-parse --abbrev-ref HEAD)
+    git push origin $from_branch
+}
+
+pull (){
+  from_branch=$1
+
+  if [ -z $from_branch ]; then
+    from_branch=$(git rev-parse --abbrev-ref HEAD)
+  fi
+
+  git pull origin $from_branch
+}
